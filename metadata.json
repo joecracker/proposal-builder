@@ -1,0 +1,6 @@
+{
+  "name": "July's Quality Construction Proposal Builder",
+  "description": "Voice-powered proposal writing and formatting tool for July's Quality Construction",
+  "requestFramePermissions": ["microphone"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
