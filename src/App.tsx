@@ -18,6 +18,7 @@ import { LogoUploadModal } from './components/LogoUploadModal';
 import { ProposalsList } from './components/ProposalsList';
 import { CategoryModal } from './components/CategoryModal';
 import { HowToView } from './components/HowToView';
+import { BackupMenu } from './components/BackupMenu';
 import { triggerSafePrint } from './printUtils';
 
 const STORAGE_KEY_PROPOSAL = 'jqc_active_proposal_v1';
@@ -460,6 +461,16 @@ export default function App() {
         onClose={() => setActiveModalCategory(null)}
         onUpdateCategory={handleUpdateCategory}
         onSelectCategory={(cat) => setActiveModalCategory(cat)}
+      />
+
+      <BackupMenu
+        proposal={proposal}
+        savedProposals={savedProposals}
+        onRestore={({ proposal: restoredProposal, savedProposals: restoredList }) => {
+          setProposal(restoredProposal);
+          setSavedProposals(restoredList);
+          setIsSaved(true);
+        }}
       />
     </div>
   );
