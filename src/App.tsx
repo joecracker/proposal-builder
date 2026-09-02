@@ -311,7 +311,7 @@ export default function App() {
   const totalWizardSteps = proposal.categories.length + 3;
 
   return (
-    <div className="min-h-screen bg-[#100b08] text-stone-100 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1f150f] via-[#120c08] to-[#0a0705] flex flex-col font-sans selection:bg-ember selection:text-ink">
+    <div className="min-h-screen bg-slate-950 text-slate-100 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#162a4a] via-[#12243f] to-[#0d1a2e] flex flex-col font-sans selection:bg-slate-700 selection:text-slate-100">
       
       {/* Top Fixed Header */}
       <Header
