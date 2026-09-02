@@ -1,0 +1,94 @@
+import { GoogleGenAI, Type } from "@google/genai";
+
+// Cloudflare Pages Function — serves POST /api/format-section
+// Format raw dictation or unstructured text into clean construction scope line items.
+
+interface Env {
+  GEMINI_API_KEY?: string;
+}
+
+export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+  try {
+    const body = (await request.json()) as {
+      categoryName?: string;
+      rawInput?: string;
+      currentItems?: string[];
+    };
+    const { categoryName, rawInput, currentItems } = body;
+
+    if (!rawInput || typeof rawInput !== "string") {
+      return Response.json({ error: "Missing or invalid rawInput" }, { status: 400 });
+    }
+
+    const ai = new GoogleGenAI({
+      apiKey: env.GEMINI_API_KEY,
+      httpOptions: {
+        headers: {
+          "User-Agent": "crackerbox-build",
+        },
+      },
+    });
+
+    const prompt = `You are an expert construction project manager and estimator for July's Quality Construction.
+Your job is to take raw voice dictation or casual spoken notes from a contractor and convert them into clear, professional, well-structured line items for a formal construction proposal sheet.
+
+Category Name: ${categoryName || "General Construction Scope"}
+Raw Spoken/Dictated Text: "${rawInput}"
+${currentItems && currentItems.length > 0 ? `Existing Line Items in this section: ${JSON.stringify(currentItems)}` : ""}
+
+Guidelines:
+1. Break down the spoken thoughts into distinct, professional bullet points/line items.
+2. DO NOT require phrases like "drop down to next line" or "bullet point" in the raw text; recognize natural pauses, action verbs, materials, dimensions, and scope changes automatically.
+3. Use precise, clear construction terminology (e.g., "Install 1/2 in. moisture-resistant drywall", "Furnish and install architectural shingles", "Prepare subfloor and tape seams").
+4. If the user mentioned quantities, materials, dimensions, or specific installation instructions, highlight them cleanly.
+5. Keep each line item sharp, concise, and professional.
+6. Return an array of formatted line item strings.
+
+Return JSON in this format:
+{
+  "formattedItems": [
+    "Line item 1...",
+    "Line item 2..."
+  ],
+  "summary": "Brief 1-sentence summary of changes made"
+}`;
+
+    const response = await ai.models.generateContent({
+      model: "gemini-3.6-flash",
+      contents: prompt,
+      config: {
+        responseMimeType: "application/json",
+        responseSchema: {
+          type: Type.OBJECT,
+          properties: {
+            formattedItems: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
+              description: "List of cleanly formatted line items",
+            },
+            summary: {
+              type: Type.STRING,
+              description: "Summary of formatting applied",
+            },
+          },
+          required: ["formattedItems"],
+        },
+      },
+    });
+
+    const resultText = response.text || "{}";
+    const parsed = JSON.parse(resultText);
+
+    return Response.json({
+      success: true,
+      formattedItems: parsed.formattedItems || [],
+      summary: parsed.summary || "Items formatted successfully",
+    });
+  } catch (error) {
+    console.error("Error formatting scope section:", error);
+    return Response.json(
+      { error: "Failed to format text with AI", details: error instanceof Error ? error.message : String(error) },
+      { status: 500 }
+    );
+  }
+};

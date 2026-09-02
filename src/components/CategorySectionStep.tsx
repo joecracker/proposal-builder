@@ -59,7 +59,7 @@ export const CategorySectionStep: React.FC<CategorySectionStepProps> = ({
     }
   };
 
-  // Call Gemini AI server endpoint to format raw dictated thoughts into sharp line items
+  // Call the AI formatting endpoint to turn raw dictated thoughts into sharp line items
   const handleAIFormat = async () => {
     if (!dictationText.trim()) return;
 

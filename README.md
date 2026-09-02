@@ -19,26 +19,24 @@ Proposal Builder is a step-by-step wizard for building out formal construction p
 
 ## How the AI formatting works
 
-Two Netlify Functions handle the AI side server-side (API key never exposed to the browser):
+Cloudflare Pages Functions handle the AI side server-side (API key never exposed to the browser):
 
 - **`/api/format-section`** — takes raw dictated/typed notes for a scope category and returns clean, professional line items
 - **`/api/parse-document`** — takes a pasted document or old proposal and extracts structured client info + scope sections
 
-Both call the Gemini API and return structured JSON that renders directly into the proposal.
+Both call a hosted AI API and return structured JSON that renders directly into the proposal.
 
 ## Tech stack
 
 - React + TypeScript, Vite
-- Netlify Functions (Express + `serverless-http`) for the AI formatting layer
-- Google Gemini API for text formatting & document parsing
-- Deployed on Netlify
+- Cloudflare Pages Functions for the AI formatting layer
+- AI text formatting & document parsing (bring-your-own-key)
 
 ## Project structure
 
 ```
 src/                  React app source
-netlify/functions/    Serverless API (AI formatting + document parsing)
-netlify.toml          Netlify build & functions configuration
+functions/api/        Cloudflare Pages Functions (AI formatting + document parsing)
 ```
 
 ## Local development
@@ -48,16 +46,16 @@ npm install
 npm run dev
 ```
 
-Requires a `GEMINI_API_KEY` environment variable for AI formatting to function (set as a Netlify environment variable in production — never committed to the repo).
+Requires an `AI_API_KEY` environment variable for AI formatting to function (set in Cloudflare Pages → Settings → Environment variables — never committed to the repo).
 
 ## Deployment
 
-Auto-deploys to Netlify on every push to `main`:
+Auto-deploys to Cloudflare Pages on every push to `main`:
 
 ```
 build command: npm run build
 publish dir:   dist
-functions dir: netlify/functions
+functions dir: functions
 ```
 
 ---
