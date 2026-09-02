@@ -7,7 +7,15 @@ interface Env {
   GEMINI_API_KEY?: string;
 }
 
-export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
+// Cloudflare infers the PagesFunction type at build time; we type the handler
+// args inline so local tsc and Cloudflare's bundler both accept it.
+export const onRequestPost = async ({
+  request,
+  env,
+}: {
+  request: Request;
+  env: Env;
+}): Promise<Response> => {
   try {
     const body = (await request.json()) as { documentText?: string };
     const { documentText } = body;
