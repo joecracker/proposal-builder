@@ -13,8 +13,8 @@ import {
   Sparkles,
   RefreshCw,
   HelpCircle,
+  Hammer,
 } from 'lucide-react';
-import { DEFAULT_COMPANY_CONFIG } from '../data/defaultTemplate';
 
 interface HeaderProps {
   currentView: ViewMode;
@@ -39,33 +39,30 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <header className="bg-stone-950 text-white border-b border-amber-500/40 sticky top-0 z-40 shadow-2xl print:hidden">
-      {/* Top Metallic Gold Accent Bar */}
-      <div className="h-1.5 w-full bg-gradient-to-r from-amber-600 via-yellow-400 to-amber-600 shadow-[0_0_12px_rgba(251,191,36,0.6)]"></div>
+      <header className="bg-stone-950 text-white border-b border-ember/40 sticky top-0 z-40 shadow-2xl print:hidden">
+      {/* Top Accent Bar */}
+      <div className="h-1.5 w-full bg-gradient-to-r from-ember to-amber-400 to-ember shadow-[0_0_12px_rgba(232,98,44,0.6)]"></div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-stone-900 via-stone-950 to-stone-950">
         <div className="flex items-center justify-between h-16 sm:h-20">
           
-          {/* Logo & JQC Brand Title */}
+          {/* App Logo & Brand Title */}
           <div className="flex items-center space-x-3 sm:space-x-4">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-xl bg-white border-2 border-amber-500/70 p-1 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(245,158,11,0.25)] overflow-hidden">
-              {(proposal.companyConfig.logoUrl || DEFAULT_COMPANY_CONFIG.logoUrl) ? (
-                <img
-                  src={proposal.companyConfig.logoUrl || DEFAULT_COMPANY_CONFIG.logoUrl}
-                  alt={proposal.companyConfig.companyName}
-                  className="max-w-full max-h-full object-contain"
-                />
-              ) : (
-                <span className="font-black text-amber-400 text-xl sm:text-2xl font-mono tracking-tighter drop-shadow-[0_2px_4px_rgba(0,0,0,0.9)]">
-                  JQC
-                </span>
-              )}
+            <div className="w-14 h-14 sm:w-16 sm:h-16 lg:w-20 lg:h-20 rounded-xl bg-white border-2 border-ember/70 p-1 flex items-center justify-center shrink-0 shadow-[0_0_15px_rgba(232,98,44,0.35)] overflow-hidden">
+              <span className="flex flex-col items-center justify-center">
+                <Hammer className="w-7 h-7 sm:w-9 sm:h-9 lg:w-11 lg:h-11 text-ember" strokeWidth={2.5} />
+              </span>
             </div>
 
             <div>
-              <h1 className="text-lg sm:text-xl lg:text-2xl font-black tracking-tight text-amber-400 uppercase drop-shadow">
-                {proposal.companyConfig.companyName || "July's Quality Construction & Remodeling L.L.C."}
+              <h1 className="text-lg sm:text-xl lg:text-2xl font-black tracking-tight uppercase drop-shadow">
+                <span className="text-cream">Next </span>
+                <span className="text-ember">Level </span>
+                <span className="text-cream/80">Proposal</span>
               </h1>
+              <p className="hidden sm:block text-[11px] font-bold text-muted uppercase tracking-[0.22em] mt-0.5">
+                Estimate &bull; Propose &bull; Deliver
+              </p>
             </div>
           </div>
 

@@ -101,7 +101,7 @@ export const DocxImportModal: React.FC<DocxImportModalProps> = ({
             Import Existing Template or Word Document
           </h2>
           <p className="text-xs text-slate-400 mt-0.5">
-            Drop your Word doc (`.docx`, `.txt`) or paste your previous Claude template text below. Our AI will structure the categories and apply July's Quality spacious layout automatically!
+            Drop your Word doc (`.docx`, `.txt`) or paste your previous template text below. Our AI will structure the categories and reuse your company's clean layout automatically!
           </p>
         </div>
       </div>
@@ -112,7 +112,7 @@ export const DocxImportModal: React.FC<DocxImportModalProps> = ({
         <div className="space-y-1">
           <p className="font-bold text-amber-300">Yes! You can drop any Word doc or template text right here.</p>
           <p className="text-amber-200/90 leading-relaxed">
-            We will extract the exact path, section categories, client details, and legal agreements, then rebuild them into the spacious, breathable layout July's Quality Construction prefers.
+            We will extract the exact path, section categories, client details, and legal agreements, then rebuild them into the spacious, breathable layout your company prefers.
           </p>
         </div>
       </div>
@@ -185,7 +185,7 @@ export const DocxImportModal: React.FC<DocxImportModalProps> = ({
           ) : (
             <>
               <Sparkles className="w-4 h-4" />
-              <span>Import & Format for July's Construction</span>
+              <span>Import & Format for This Company</span>
             </>
           )}
         </button>

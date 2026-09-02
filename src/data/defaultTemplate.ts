@@ -1,13 +1,13 @@
 import { CompanyConfig, LegalTerms, ScopeCategory, Proposal } from '../types';
 
 export const DEFAULT_COMPANY_CONFIG: CompanyConfig = {
-  companyName: "July's Quality Construction & Remodeling L.L.C.",
-  tagline: "Licensed Builder • Remodeler Since 1992 • State Licensed & Insured",
-  address: "P.O. Box 386 • Clio, Michigan 48420",
-  phone: "810-845-1778",
-  email: "julysconstruction@hotmail.com",
-  website: "www.julysconstruction.com",
-  licenseNumber: "License# 2101104482",
+  companyName: "",
+  tagline: "",
+  address: "",
+  phone: "",
+  email: "",
+  website: "",
+  licenseNumber: "",
   logoUrl: "",
 };
 
@@ -20,8 +20,8 @@ Due upon completion of job: $`,
   dueAtSigning: "",
   dueAtStart: "",
   dueUponCompletion: "",
-  warrantyInfo: "All work performed by July's Quality Construction & Remodeling L.L.C. comes with state-licensed craftsmanship guarantee.",
-  contractorTitle: "July's Quality Construction Representative",
+  warrantyInfo: "All work performed by the contractor comes with a state-licensed craftsmanship guarantee.",
+  contractorTitle: "Contractor / Company Representative",
   clientTitle: "Homeowner / Client",
 };
 
@@ -96,9 +96,9 @@ export const SAMPLE_PROPOSAL: Proposal = {
     phone: "",
     email: "",
     projectSite: "",
-    proposalNumber: `JQC-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+    proposalNumber: "",
     proposalDate: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-    salesRep: "July (Owner & Lead Builder)"
+    salesRep: ""
   },
   categories: DEFAULT_CATEGORIES,
   legalTerms: DEFAULT_LEGAL_TERMS,

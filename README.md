@@ -1,4 +1,4 @@
-# Proposal Builder
+# Next Level Proposal
 
 > A voice-and-dictation-friendly construction proposal generator — turn a phone call's worth of rambling job notes into a clean, professional, print-ready client proposal.
 

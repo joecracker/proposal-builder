@@ -1,7 +1,6 @@
 import React from 'react';
 import { Proposal } from '../types';
 import { Printer, Download, Edit3, Sparkles } from 'lucide-react';
-import { DEFAULT_COMPANY_CONFIG } from '../data/defaultTemplate';
 import { triggerSafePrint } from '../printUtils';
 
 interface DocumentPreviewProps {
@@ -16,7 +15,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
   onOpenCategoryModal,
 }) => {
   const { companyConfig, clientInfo, categories, legalTerms, totalEstimate, notes } = proposal;
-  const logoToDisplay = companyConfig.logoUrl || DEFAULT_COMPANY_CONFIG.logoUrl;
+  const logoToDisplay = companyConfig.logoUrl || '';
 
   const handlePrint = () => {
     triggerSafePrint(proposal);
@@ -54,12 +53,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                   referrerPolicy="no-referrer"
                 />
               </div>
-            ) : (
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-slate-900 print:bg-transparent border-2 border-amber-500 print:border-slate-900 p-2 flex flex-col items-center justify-center shadow-md print:shadow-none">
-                <span className="text-3xl font-black text-amber-400 print:text-slate-900 font-mono tracking-tighter">JQC</span>
-                <span className="text-[9px] font-extrabold text-slate-300 uppercase tracking-widest mt-0.5">July's Quality</span>
-              </div>
-            )}
+            ) : null}
           </div>
 
           <div className="print:-mt-8">
@@ -112,7 +106,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
                 </p>
                 <p>
                   <strong className="text-slate-700">Proposal #:</strong>{' '}
-                  <span className="text-slate-800 font-mono">{clientInfo.proposalNumber || 'JQC-2026'}</span>
+                  <span className="text-slate-800 font-mono">{clientInfo.proposalNumber || '—'}</span>
                 </p>
               </div>
             </div>
@@ -186,7 +180,7 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
             <h3 className="text-sm font-black text-slate-900 uppercase tracking-wider">
               PAYMENT SCHEDULE
             </h3>
-            <span className="text-xs text-slate-500 font-medium">July's Quality Construction</span>
+            <span className="text-xs text-slate-500 font-medium">{companyConfig.companyName || 'Contractor'}</span>
           </div>
 
           <div className="bg-white rounded-lg border border-slate-300 shadow-sm p-4 space-y-3">
@@ -272,7 +266,9 @@ export const DocumentPreview: React.FC<DocumentPreviewProps> = ({
 
         {/* Document Footer */}
         <div className="mt-12 pt-4 border-t border-slate-200 text-center text-[10px] text-slate-400 uppercase tracking-widest font-mono">
-          July's Quality Construction &bull; Quality Craftsmen Building With Integrity &bull; Page 1 of 1
+          {companyConfig.companyName ? `${companyConfig.companyName} • ` : ''}
+          {companyConfig.tagline ? `${companyConfig.tagline} • ` : ''}
+          Page 1 of 1
         </div>
 
       </div>

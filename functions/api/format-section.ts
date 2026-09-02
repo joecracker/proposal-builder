@@ -37,7 +37,7 @@ export const onRequestPost = async ({
       },
     });
 
-    const prompt = `You are an expert construction project manager and estimator for July's Quality Construction.
+    const prompt = `You are an expert construction project manager and estimator.
 Your job is to take raw voice dictation or casual spoken notes from a contractor and convert them into clear, professional, well-structured line items for a formal construction proposal sheet.
 
 Category Name: ${categoryName || "General Construction Scope"}

@@ -162,17 +162,17 @@ export const ContactInfoStep: React.FC<ContactInfoStepProps> = ({
           />
         </div>
 
-        {/* Proposal # */}
+        {/* Proposal # (optional) */}
         <div className="space-y-1.5">
           <label className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
             <FileText className="w-3.5 h-3.5 text-amber-400" />
-            Proposal #
+            Proposal # <span className="text-[10px] text-slate-500 font-normal">(optional)</span>
           </label>
           <input
             type="text"
             value={clientInfo.proposalNumber}
             onChange={(e) => handleChange('proposalNumber', e.target.value)}
-            placeholder="JQC-2026-101"
+            placeholder="Optional — e.g. 2026-101"
             className="w-full bg-slate-800/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all"
           />
         </div>
@@ -187,7 +187,7 @@ export const ContactInfoStep: React.FC<ContactInfoStepProps> = ({
             type="text"
             value={clientInfo.proposalDate}
             onChange={(e) => handleChange('proposalDate', e.target.value)}
-            placeholder="July 28, 2026"
+            placeholder="March 28, 2026"
             className="w-full bg-slate-800/90 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all"
           />
         </div>

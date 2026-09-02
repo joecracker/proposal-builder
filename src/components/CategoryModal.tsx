@@ -170,7 +170,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <span className="text-xs font-bold uppercase tracking-widest text-amber-400 font-mono">
-                  JQC QUICK EDIT POP-UP
+                  QUICK EDIT POP-UP
                 </span>
                 {category.isConfirmed && (
                   <span className="bg-emerald-950 text-emerald-300 text-[10px] font-bold px-2 py-0.5 rounded-full border border-emerald-500/40">
@@ -361,7 +361,7 @@ export const CategoryModal: React.FC<CategoryModalProps> = ({
         {/* Modal Bottom Action Footer */}
         <div className="bg-stone-900 border-t border-amber-500/30 px-5 py-3.5 flex items-center justify-between shrink-0">
           <span className="text-xs text-stone-400">
-            July's Quality Construction &bull; Section Editor
+            Next Level Proposal &bull; Section Editor
           </span>
 
           <div className="flex items-center space-x-3">

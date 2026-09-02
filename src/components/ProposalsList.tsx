@@ -38,7 +38,7 @@ export const ProposalsList: React.FC<ProposalsListProps> = ({
             <FolderOpen className="w-4 h-4" /> Saved Proposal Records
           </span>
           <h2 className="text-xl font-bold text-white mt-1">
-            July's Construction Proposal Library
+            Proposal Library
           </h2>
           <p className="text-xs text-slate-400 mt-0.5">
             View, load, clone, or delete past client proposals.

@@ -23,6 +23,7 @@ import { triggerSafePrint } from './printUtils';
 
 const STORAGE_KEY_PROPOSAL = 'jqc_active_proposal_v1';
 const STORAGE_KEY_PROPOSALS_LIST = 'jqc_proposals_list_v1';
+const STORAGE_KEY_COMPANY_PROFILE = 'pb_company_profile_v1';
 
 export default function App() {
   const [activeModalCategory, setActiveModalCategory] = useState<ScopeCategory | null>(null);
@@ -91,6 +92,29 @@ export default function App() {
     return [SAMPLE_PROPOSAL];
   });
 
+  // Company Profile: the company's header info + logo, saved in the browser and
+  // applied to every new proposal. Seeded from an existing saved profile, then
+  // from any previously saved proposal (so existing data isn't lost).
+  const [companyProfile, setCompanyProfile] = useState<CompanyConfig>(() => {
+    const stored = localStorage.getItem(STORAGE_KEY_COMPANY_PROFILE);
+    if (stored) {
+      try {
+        const parsed = JSON.parse(stored);
+        return { ...DEFAULT_COMPANY_CONFIG, ...parsed };
+      } catch (e) {
+        console.error('Failed to parse saved company profile:', e);
+      }
+    }
+    try {
+      const v1 = JSON.parse(localStorage.getItem('jqc_active_proposal_v1') || '{}');
+      const legacy = v1.companyConfig as CompanyConfig | undefined;
+      if (legacy && legacy.companyName) return { ...DEFAULT_COMPANY_CONFIG, ...legacy };
+    } catch (e) {
+      // ignore
+    }
+    return DEFAULT_COMPANY_CONFIG;
+  });
+
   const [currentView, setCurrentView] = useState<ViewMode>(() => {
     const params = new URLSearchParams(window.location.search);
     return (params.get('view') as ViewMode) || 'wizard';
@@ -103,6 +127,11 @@ export default function App() {
     localStorage.setItem(STORAGE_KEY_PROPOSAL, JSON.stringify(proposal));
     localStorage.setItem(STORAGE_KEY_PROPOSALS_LIST, JSON.stringify(savedProposals));
   }, [proposal, savedProposals]);
+
+  // Keep the saved company profile in sync
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY_COMPANY_PROFILE, JSON.stringify(companyProfile));
+  }, [companyProfile]);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -163,6 +192,14 @@ export default function App() {
     setIsSaved(true);
   };
 
+  const handleSaveCompanyProfile = (newConfig: CompanyConfig) => {
+    setCompanyProfile(newConfig);
+    handleUpdateProposal({
+      ...proposal,
+      companyConfig: newConfig,
+    });
+  };
+
   const handleNewProposal = () => {
     const newId = `prop-${Date.now()}`;
     const newProp: Proposal = {
@@ -177,9 +214,9 @@ export default function App() {
         phone: '',
         email: '',
         projectSite: '',
-        proposalNumber: `JQC-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+        proposalNumber: '',
         proposalDate: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-        salesRep: 'July (Owner & Lead Estimator)',
+        salesRep: '',
       },
       categories: DEFAULT_CATEGORIES.map((cat) => ({
         ...cat,
@@ -188,7 +225,7 @@ export default function App() {
         items: [],
       })),
       legalTerms: DEFAULT_LEGAL_TERMS,
-      companyConfig: proposal.companyConfig || DEFAULT_COMPANY_CONFIG,
+      companyConfig: companyProfile,
       totalEstimate: '$0.00',
       notes: '',
     };
@@ -207,7 +244,7 @@ export default function App() {
       title: `${source.title} (Copy)`,
       clientInfo: {
         ...source.clientInfo,
-        proposalNumber: `JQC-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+        proposalNumber: '',
         proposalDate: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
       },
       createdAt: new Date().toISOString().split('T')[0],
@@ -274,7 +311,7 @@ export default function App() {
   const totalWizardSteps = proposal.categories.length + 3;
 
   return (
-    <div className="min-h-screen bg-[#100b08] text-stone-100 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1f150f] via-[#120c08] to-[#0a0705] flex flex-col font-sans selection:bg-amber-1000 selection:text-stone-950">
+    <div className="min-h-screen bg-[#100b08] text-stone-100 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#1f150f] via-[#120c08] to-[#0a0705] flex flex-col font-sans selection:bg-ember selection:text-ink">
       
       {/* Top Fixed Header */}
       <Header
@@ -434,16 +471,11 @@ export default function App() {
           />
         )}
 
-        {/* VIEW 5: COMPANY BRANDING & LOGO SETTINGS */}
+        {/* VIEW 5: COMPANY PROFILE, LOGO & HEADER */}
         {currentView === 'settings' && (
           <LogoUploadModal
-            companyConfig={proposal.companyConfig || DEFAULT_COMPANY_CONFIG}
-            onUpdateCompanyConfig={(newConfig) => {
-              handleUpdateProposal({
-                ...proposal,
-                companyConfig: newConfig,
-              });
-            }}
+            companyConfig={companyProfile}
+            onUpdateCompanyConfig={handleSaveCompanyProfile}
           />
         )}
 

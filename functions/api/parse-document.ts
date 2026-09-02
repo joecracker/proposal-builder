@@ -33,7 +33,7 @@ export const onRequestPost = async ({
       },
     });
 
-    const prompt = `You are an AI assistant for July's Quality Construction proposal generator.
+    const prompt = `You are an AI assistant for a generic construction proposal generator.
 Parse the following unstructured or imported document text into a structured construction proposal object.
 
 Document Content:

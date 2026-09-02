@@ -56,7 +56,7 @@ export function BackupMenu({ proposal, savedProposals, onRestore }: BackupMenuPr
       const text = await file.text();
       const parsed = JSON.parse(text) as Partial<BackupPayload>;
       if (!parsed.proposal || !Array.isArray(parsed.savedProposals)) {
-        setStatus('That file does not look like a Proposal Builder backup.');
+        setStatus('That file does not look like a Next Level Proposal backup.');
         return;
       }
       if (!window.confirm('Import this backup? It will replace your current active proposal and saved list.')) {

@@ -1,5 +1,41 @@
 @import "tailwindcss";
 
+/* Next Level brand palette.
+   slate → warm ink/cream neutrals, amber → ember orange. */
+@theme {
+  /* Brand aliases */
+  --color-ink: #15120f;
+  --color-ember: #e8622c;
+  --color-cream: #f5f3ef;
+  --color-muted: #8a857e;
+
+  /* slate → warm neutrals */
+  --color-slate-50: #fbf9f5;
+  --color-slate-100: #f5f3ef;
+  --color-slate-200: #e9e4db;
+  --color-slate-300: #cfc8bc;
+  --color-slate-400: #a79f91;
+  --color-slate-500: #8a857e;
+  --color-slate-600: #6b665e;
+  --color-slate-700: #3f3a33;
+  --color-slate-800: #211d18;
+  --color-slate-900: #171310;
+  --color-slate-950: #0f0c09;
+
+  /* amber → ember orange scale */
+  --color-amber-50: #fef3ee;
+  --color-amber-100: #fce3d6;
+  --color-amber-200: #f8c4aa;
+  --color-amber-300: #f3a17c;
+  --color-amber-400: #ee8150;
+  --color-amber-500: #e8622c;
+  --color-amber-600: #c94e1e;
+  --color-amber-700: #a23d18;
+  --color-amber-800: #7f2f12;
+  --color-amber-900: #672710;
+  --color-amber-950: #381303;
+}
+
 @media print {
   @page {
     margin: 0.5in;
