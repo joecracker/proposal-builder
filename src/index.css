@@ -54,4 +54,13 @@
   }
 }
 
+/* Force a page break before each of the contract forms when printing,
+   so Proposal / Rescind / Photo Release / Change Order each start on their own page. */
+@media print {
+  .page-break {
+    page-break-before: always;
+    break-before: page;
+  }
+}
+
 

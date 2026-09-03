@@ -14,6 +14,7 @@ import { ContactInfoStep } from './components/ContactInfoStep';
 import { CategorySectionStep } from './components/CategorySectionStep';
 import { LegalStep } from './components/LegalStep';
 import { DocumentPreview } from './components/DocumentPreview';
+import { ContractForms } from './components/ContractForms';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { DocxImportModal } from './components/DocxImportModal';
 import { LogoUploadModal } from './components/LogoUploadModal';
@@ -454,11 +455,14 @@ export default function App() {
 
                 {/* Step N+2: Preview Embedded */}
                 {currentStepIndex === proposal.categories.length + 2 && (
-                  <DocumentPreview
-                    proposal={proposal}
-                    onEditSection={(idx) => goToStep(idx)}
-                    onOpenCategoryModal={(cat) => setActiveModalCategory(cat)}
-                  />
+                  <>
+                    <DocumentPreview
+                      proposal={proposal}
+                      onEditSection={(idx) => goToStep(idx)}
+                      onOpenCategoryModal={(cat) => setActiveModalCategory(cat)}
+                    />
+                    <ContractForms proposal={proposal} />
+                  </>
                 )}
               </div>
             </div>
@@ -471,14 +475,17 @@ export default function App() {
 
         {/* VIEW 2: PROPOSAL SHEET PREVIEW */}
         {currentView === 'preview' && (
-          <DocumentPreview
-            proposal={proposal}
-            onEditSection={(idx) => {
-              goToStep(idx);
-              setCurrentView('wizard');
-            }}
-            onOpenCategoryModal={(cat) => setActiveModalCategory(cat)}
-          />
+          <>
+            <DocumentPreview
+              proposal={proposal}
+              onEditSection={(idx) => {
+                goToStep(idx);
+                setCurrentView('wizard');
+              }}
+              onOpenCategoryModal={(cat) => setActiveModalCategory(cat)}
+            />
+            <ContractForms proposal={proposal} />
+          </>
         )}
 
         {/* VIEW 3: SAVED PROPOSALS LIBRARY */}
