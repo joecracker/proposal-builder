@@ -48,8 +48,9 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Brand Title — full name, no icon box */}
           <div className="flex flex-col justify-center cursor-pointer" onClick={() => setCurrentView('home')} title="Back to home">
             <h1 className="tracking-tight uppercase drop-shadow leading-none">
-              <span className="text-xl sm:text-2xl lg:text-[28px] font-black text-slate-100">Next Level </span>
-              <span className="text-base sm:text-lg lg:text-xl font-semibold tracking-wide text-slate-400">Proposal</span>
+              <span className="text-xl sm:text-2xl lg:text-[28px] font-black text-slate-100">Next </span>
+              <span className="text-xl sm:text-2xl lg:text-[28px] font-black text-slate-400">Level</span>
+              <span className="text-base sm:text-lg lg:text-xl font-semibold tracking-wide text-slate-500 ml-2">Proposal</span>
             </h1>
             <p className="hidden sm:block text-[11px] font-bold text-slate-400 uppercase tracking-[0.22em] mt-1">
               Estimate &bull; Propose &bull; Deliver
