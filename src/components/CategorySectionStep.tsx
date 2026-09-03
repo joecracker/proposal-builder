@@ -237,10 +237,10 @@ export const CategorySectionStep: React.FC<CategorySectionStepProps> = ({
       {/* Dictation Box & AI Formatter Panel */}
       {!category.isConfirmed && (
         <div className="bg-slate-950/70 rounded-2xl border border-amber-500/30 p-4 sm:p-5 space-y-3">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div className="flex items-center space-x-2">
-              <Volume2 className="w-4 h-4 text-amber-400" />
-              <h3 className="text-sm font-bold text-slate-100">
+              <Volume2 className="w-5 h-5 text-amber-400" />
+              <h3 className="text-sm sm:text-base font-bold text-slate-100">
                 Voice Dictation & Quick Note Rattle-Off
               </h3>
             </div>
@@ -248,21 +248,21 @@ export const CategorySectionStep: React.FC<CategorySectionStepProps> = ({
             {isSupported && (
               <button
                 onClick={handleToggleListening}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                className={`flex items-center justify-center space-x-3 px-6 py-3 rounded-2xl text-base font-bold transition-all cursor-pointer ${
                   isListening
-                    ? 'bg-rose-500 text-white animate-pulse shadow-lg ring-2 ring-rose-400'
-                    : 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-md'
+                    ? 'bg-rose-500 text-white animate-pulse shadow-lg ring-4 ring-rose-400/50'
+                    : 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-lg hover:shadow-xl'
                 }`}
               >
                 {isListening ? (
                   <>
-                    <MicOff className="w-4 h-4" />
-                    <span>Stop Dictating</span>
+                    <MicOff className="w-6 h-6" />
+                    <span>Stop — Done Talking</span>
                   </>
                 ) : (
                   <>
-                    <Mic className="w-4 h-4" />
-                    <span>Click to Speak Notes</span>
+                    <Mic className="w-6 h-6" />
+                    <span>Tap to Speak</span>
                   </>
                 )}
               </button>

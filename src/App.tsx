@@ -4,9 +4,11 @@
  */
 
 import React, { useState, useEffect } from 'react';
+import { Sparkles } from 'lucide-react';
 import { Proposal, ViewMode, ScopeCategory, CompanyConfig } from './types';
 import { SAMPLE_PROPOSAL, DEFAULT_CATEGORIES, DEFAULT_COMPANY_CONFIG, DEFAULT_LEGAL_TERMS } from './data/defaultTemplate';
 import { Header } from './components/Header';
+import { Launcher } from './components/Launcher';
 import { WizardSteps } from './components/WizardSteps';
 import { ContactInfoStep } from './components/ContactInfoStep';
 import { CategorySectionStep } from './components/CategorySectionStep';
@@ -117,10 +119,19 @@ export default function App() {
 
   const [currentView, setCurrentView] = useState<ViewMode>(() => {
     const params = new URLSearchParams(window.location.search);
-    return (params.get('view') as ViewMode) || 'wizard';
+    return (params.get('view') as ViewMode) || 'home';
   });
   const [currentStepIndex, setCurrentStepIndex] = useState<number>(0);
+  const [maxReachedStep, setMaxReachedStep] = useState<number>(0);
+  const [powerMode, setPowerMode] = useState<boolean>(false);
   const [isSaved, setIsSaved] = useState<boolean>(true);
+
+  // Guardrail navigation: advance the "furthest reached" marker whenever we
+  // move forward, so locked steps unlock one at a time.
+  const goToStep = (idx: number) => {
+    setCurrentStepIndex(idx);
+    setMaxReachedStep((m) => Math.max(m, idx));
+  };
 
   // Auto-save active proposal to localStorage
   useEffect(() => {
@@ -232,7 +243,9 @@ export default function App() {
 
     setProposal(newProp);
     setSavedProposals((prev) => [newProp, ...prev]);
+    setMaxReachedStep(0);
     setCurrentStepIndex(0);
+    setPowerMode(false);
     setCurrentView('wizard');
     setIsSaved(true);
   };
@@ -253,7 +266,9 @@ export default function App() {
 
     setProposal(cloned);
     setSavedProposals((prev) => [cloned, ...prev]);
+    setMaxReachedStep(0);
     setCurrentStepIndex(0);
+    setPowerMode(false);
     setCurrentView('wizard');
     setIsSaved(true);
   };
@@ -286,7 +301,7 @@ export default function App() {
       categories: [...proposal.categories, newCat],
     });
 
-    setCurrentStepIndex(proposal.categories.length + 1);
+    goToStep(proposal.categories.length + 1);
   };
 
   // Delete category
@@ -296,7 +311,7 @@ export default function App() {
       ...proposal,
       categories: updatedCategories,
     });
-    setCurrentStepIndex(0);
+    goToStep(0);
   };
 
   // Category update
@@ -326,7 +341,26 @@ export default function App() {
       {/* Main Container */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
         <ErrorBoundary>
-        
+
+        {/* VIEW 0: LAUNCHER / HOME */}
+        {currentView === 'home' && (
+          <Launcher
+            hasExistingDraft={Boolean(
+              proposal.clientInfo.clientName ||
+              proposal.notes ||
+              proposal.categories.some((c) => c.items.length > 0)
+            )}
+            onNewProposal={handleNewProposal}
+            onContinueDraft={() => {
+              setMaxReachedStep(Math.max(maxReachedStep, currentStepIndex));
+              setCurrentView('wizard');
+            }}
+            onOpenPast={() => setCurrentView('history')}
+            onCompanyProfile={() => setCurrentView('settings')}
+            onHowTo={() => setCurrentView('howto')}
+          />
+        )}
+
         {/* VIEW 1: STEP-BY-STEP DICTATION WIZARD */}
         {currentView === 'wizard' && (
           <div className="space-y-10">
@@ -338,7 +372,10 @@ export default function App() {
                 <WizardSteps
                   categories={proposal.categories}
                   currentStepIndex={currentStepIndex}
-                  onSelectStep={(idx) => setCurrentStepIndex(idx)}
+                  maxReachedStep={maxReachedStep}
+                  powerMode={powerMode}
+                  onTogglePowerMode={() => setPowerMode((v) => !v)}
+                  onSelectStep={(idx) => goToStep(idx)}
                   onAddCategory={handleAddCategory}
                   onDeleteCategory={handleDeleteCategory}
                   onOpenCategoryModal={(cat) => setActiveModalCategory(cat)}
@@ -348,6 +385,18 @@ export default function App() {
               {/* Right Active Step Work Area */}
               <div className="lg:col-span-8 space-y-6">
                 
+                {/* Preview button — quick peek, then jump right back */}
+                <div className="flex justify-end">
+                  <button
+                    onClick={() => setCurrentView('preview')}
+                    className="bg-slate-800 hover:bg-slate-700 text-slate-100 border border-slate-400/40 shadow-lg px-5 py-2.5 rounded-xl text-sm font-bold flex items-center space-x-2 transition-all cursor-pointer"
+                    title="Preview the proposal sheet"
+                  >
+                    <Sparkles className="w-4 h-4 text-slate-300" />
+                    <span>Preview</span>
+                  </button>
+                </div>
+
                 {/* Step 0: Contact Info */}
                 {currentStepIndex === 0 && (
                   <ContactInfoStep
@@ -367,7 +416,7 @@ export default function App() {
                     onChangeNotes={(notesStr) =>
                       handleUpdateProposal({ ...proposal, notes: notesStr })
                     }
-                    onConfirmStep={() => setCurrentStepIndex(1)}
+                    onConfirmStep={() => goToStep(1)}
                   />
                 )}
 
@@ -380,12 +429,12 @@ export default function App() {
                     onUpdateCategory={handleUpdateCategory}
                     onNextStep={() => {
                       if (currentStepIndex < totalWizardSteps - 1) {
-                        setCurrentStepIndex(currentStepIndex + 1);
+                        goToStep(currentStepIndex + 1);
                       } else {
                         setCurrentView('preview');
                       }
                     }}
-                    onPrevStep={() => setCurrentStepIndex(currentStepIndex - 1)}
+                    onPrevStep={() => goToStep(currentStepIndex - 1)}
                   />
                 )}
 
@@ -397,9 +446,9 @@ export default function App() {
                       handleUpdateProposal({ ...proposal, legalTerms: terms })
                     }
                     onConfirmStep={() => {
-                      setCurrentStepIndex(proposal.categories.length + 2);
+                      goToStep(proposal.categories.length + 2);
                     }}
-                    onPrevStep={() => setCurrentStepIndex(proposal.categories.length)}
+                    onPrevStep={() => goToStep(proposal.categories.length)}
                   />
                 )}
 
@@ -407,20 +456,12 @@ export default function App() {
                 {currentStepIndex === proposal.categories.length + 2 && (
                   <DocumentPreview
                     proposal={proposal}
-                    onEditSection={(idx) => setCurrentStepIndex(idx)}
+                    onEditSection={(idx) => goToStep(idx)}
                     onOpenCategoryModal={(cat) => setActiveModalCategory(cat)}
                   />
                 )}
               </div>
             </div>
-            </div>
-            {/* LIVE SAMPLE CONTRACT PRINT-OUT PREVIEW AT THE BOTTOM */}
-            <div className="border-t-2 border-amber-500/30 pt-8 mt-6 print:border-none print:pt-0 print:mt-0">
-              <DocumentPreview
-                proposal={proposal}
-                onEditSection={(idx) => setCurrentStepIndex(idx)}
-                onOpenCategoryModal={(cat) => setActiveModalCategory(cat)}
-              />
             </div>
 
           </div>
@@ -433,7 +474,7 @@ export default function App() {
           <DocumentPreview
             proposal={proposal}
             onEditSection={(idx) => {
-              setCurrentStepIndex(idx);
+              goToStep(idx);
               setCurrentView('wizard');
             }}
             onOpenCategoryModal={(cat) => setActiveModalCategory(cat)}
@@ -447,6 +488,8 @@ export default function App() {
             currentProposalId={proposal.id}
             onSelectProposal={(p) => {
               setProposal(p);
+              setMaxReachedStep(0);
+              setCurrentStepIndex(0);
               setCurrentView('preview');
             }}
             onNewProposal={handleNewProposal}
@@ -464,8 +507,9 @@ export default function App() {
                 ...proposal,
                 ...imported,
               });
-              setCurrentView('wizard');
+              setMaxReachedStep(0);
               setCurrentStepIndex(0);
+              setCurrentView('wizard');
             }}
             onClose={() => setCurrentView('wizard')}
           />

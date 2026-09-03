@@ -46,7 +46,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center justify-between h-16 sm:h-20">
           
           {/* Brand Title — full name, no icon box */}
-          <div className="flex flex-col justify-center">
+          <div className="flex flex-col justify-center cursor-pointer" onClick={() => setCurrentView('home')} title="Back to home">
             <h1 className="tracking-tight uppercase drop-shadow leading-none">
               <span className="text-xl sm:text-2xl lg:text-[28px] font-black text-slate-100">Next Level </span>
               <span className="text-base sm:text-lg lg:text-xl font-semibold tracking-wide text-slate-400">Proposal</span>
