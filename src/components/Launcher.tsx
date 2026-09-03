@@ -28,7 +28,7 @@ export const Launcher: React.FC<LauncherProps> = ({
         <h1 className="uppercase tracking-tight leading-none">
           <span className="text-4xl sm:text-5xl font-black text-slate-100">Next </span>
           <span className="text-4xl sm:text-5xl font-black text-slate-400">Level</span>
-          <span className="text-2xl sm:text-3xl font-semibold tracking-wide text-slate-500 ml-3">Proposal</span>
+          <span className="text-2xl sm:text-3xl font-semibold tracking-wide text-slate-100 ml-3">Proposal</span>
         </h1>
         <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.22em] mt-3">
           Estimate &bull; Propose &bull; Deliver
